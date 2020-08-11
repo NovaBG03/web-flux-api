@@ -8,11 +8,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.reactivestreams.Publisher;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith({MockitoExtension.class})
@@ -53,5 +55,22 @@ class CategoryControllerTest {
         webTestClient.get().uri("/api/v1/categories/" + id)
                 .exchange()
                 .expectBody(Category.class);
+    }
+
+    @Test
+    void postCategory() {
+        final String id = "id";
+        final String description = "description";
+
+        given(categoryRepository.saveAll(any(Publisher.class)))
+            .willReturn(Flux.just(Category.builder().id(id).description(description).build()));
+
+        Mono<Category> categoryMono = Mono.just(Category.builder().description(description).build());
+
+        webTestClient.post()
+                .uri("/api/v1/categories")
+                .body(categoryMono, Category.class)
+                .exchange()
+                .expectStatus().isCreated();
     }
 }
