@@ -39,7 +39,8 @@ class CategoryControllerTest {
                 .willReturn(Flux.just(Category.builder().id("id1").build(),
                         Category.builder().id("id2").build()));
 
-        webTestClient.get().uri("/api/v1/categories")
+        webTestClient.get()
+                .uri("/api/v1/categories")
                 .exchange()
                 .expectBodyList(Category.class)
                 .hasSize(2);
@@ -52,7 +53,8 @@ class CategoryControllerTest {
         given(categoryRepository.findById(id))
                 .willReturn(Mono.just(Category.builder().id(id).build()));
 
-        webTestClient.get().uri("/api/v1/categories/" + id)
+        webTestClient.get()
+                .uri("/api/v1/categories/" + id)
                 .exchange()
                 .expectBody(Category.class);
     }

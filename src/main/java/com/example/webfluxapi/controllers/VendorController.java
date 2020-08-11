@@ -2,10 +2,9 @@ package com.example.webfluxapi.controllers;
 
 import com.example.webfluxapi.domain.Vendor;
 import com.example.webfluxapi.repositories.VendorRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.reactivestreams.Publisher;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -27,5 +26,11 @@ public class VendorController {
     @GetMapping("/{id}")
     public Mono<Vendor> getVendorById(@PathVariable String id) {
         return vendorRepository.findById(id);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    public Flux<Vendor> postVendor(@RequestBody Publisher<Vendor> vendorPublisher) {
+        return vendorRepository.saveAll(vendorPublisher);
     }
 }
