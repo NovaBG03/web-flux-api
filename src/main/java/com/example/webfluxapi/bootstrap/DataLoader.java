@@ -22,8 +22,8 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // categoryRepository.deleteAll().block();
-        // vendorRepository.deleteAll().block();
+        /*categoryRepository.deleteAll().block();
+        vendorRepository.deleteAll().block();*/
 
         if (categoryRepository.count().block() == 0) {
             loadCategories();
@@ -36,53 +36,38 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private void loadCategories() {
-        Category fruits = new Category();
-        fruits.setDescription("Fruits");
+        Category fruits = Category.builder().description("Fruits").build();
         categoryRepository.save(fruits).block();
 
-        Category dried = new Category();
-        dried.setDescription("Dried");
+        Category dried = Category.builder().description("Dried").build();
         categoryRepository.save(dried).block();
 
-        Category fresh = new Category();
-        fresh.setDescription("Fresh");
+        Category fresh = Category.builder().description("Fresh").build();
         categoryRepository.save(fresh).block();
 
-        Category exotic = new Category();
-        exotic.setDescription("Exotic");
+        Category exotic = Category.builder().description("Exotic").build();
         categoryRepository.save(exotic).block();
 
-        Category nuts = new Category();
-        nuts.setDescription("Nuts");
+        Category nuts = Category.builder().description("Nuts").build();
         categoryRepository.save(nuts).block();
 
         log.info("Loaded Categories: " + categoryRepository.count().block());
     }
 
     private void loadVendors() {
-        Vendor michael = new Vendor();
-        michael.setFirstName("Michael");
-        michael.setLastName("Lachappele");
+        Vendor michael = Vendor.builder().firstName("Michael").lastName("Lachappele").build();
         vendorRepository.save(michael).block();
 
-        Vendor ivan = new Vendor();
-        ivan.setFirstName("Ivan");
-        ivan.setLastName("Georgiev");
+        Vendor ivan = Vendor.builder().firstName("Ivan").lastName("Georgiev").build();
         vendorRepository.save(ivan).block();
 
-        Vendor david = new Vendor();
-        david.setFirstName("David");
-        david.setLastName("Winter");
+        Vendor david = Vendor.builder().firstName("David").lastName("Winter").build();
         vendorRepository.save(david).block();
 
-        Vendor anne = new Vendor();
-        anne.setFirstName("Anne");
-        anne.setLastName("Hine");
+        Vendor anne = Vendor.builder().firstName("Anne").lastName("Hine").build();
         vendorRepository.save(anne).block();
 
-        Vendor joe = new Vendor();
-        joe.setFirstName("Joe");
-        joe.setLastName("Buck");
+        Vendor joe = Vendor.builder().firstName("Joe").lastName("Buck").build();
         vendorRepository.save(joe).block();
 
         log.info("Loaded Vendors: " + vendorRepository.count().block());
