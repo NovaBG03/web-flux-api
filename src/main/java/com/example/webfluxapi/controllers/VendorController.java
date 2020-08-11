@@ -33,4 +33,10 @@ public class VendorController {
     public Flux<Vendor> postVendor(@RequestBody Publisher<Vendor> vendorPublisher) {
         return vendorRepository.saveAll(vendorPublisher);
     }
+
+    @PutMapping("/{id}")
+    public Mono<Vendor> putVendor(@PathVariable String id ,@RequestBody Vendor vendor) {
+        vendor.setId(id);
+        return vendorRepository.save(vendor);
+    }
 }

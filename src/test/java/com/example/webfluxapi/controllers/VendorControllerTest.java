@@ -75,4 +75,20 @@ class VendorControllerTest {
                 .exchange()
                 .expectStatus().isCreated();
     }
+
+    @Test
+    void putVendor() {
+        final String id = "id";
+
+        given(vendorRepository.save(any()))
+                .willReturn(Mono.just(Vendor.builder().id(id).build()));
+
+        Mono<Vendor> vendorMono = Mono.just(Vendor.builder().build());
+
+        webTestClient.put()
+                .uri("/api/v1/vendors/" + id)
+                .body(vendorMono, Vendor.class)
+                .exchange()
+                .expectStatus().isOk();
+    }
 }
