@@ -91,4 +91,23 @@ class VendorControllerTest {
                 .exchange()
                 .expectStatus().isOk();
     }
+
+    @Test
+    void patchVendor() {
+        final String id = "id";
+
+        given(vendorRepository.findById(id))
+                .willReturn(Mono.just(Vendor.builder().build()));
+
+        given(vendorRepository.saveAll(any(Publisher.class)))
+                .willReturn(Flux.just(Vendor.builder().id(id).build()));
+
+        Mono<Vendor> vendorMono = Mono.just(Vendor.builder().build());
+
+        webTestClient.patch()
+                .uri("/api/v1/vendors/" + id)
+                .body(vendorMono, Vendor.class)
+                .exchange()
+                .expectStatus().isOk();
+    }
 }

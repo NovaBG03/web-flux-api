@@ -1,5 +1,6 @@
 package com.example.webfluxapi.controllers;
 
+import com.example.webfluxapi.domain.Category;
 import com.example.webfluxapi.domain.Vendor;
 import com.example.webfluxapi.repositories.VendorRepository;
 import org.reactivestreams.Publisher;
@@ -38,5 +39,21 @@ public class VendorController {
     public Mono<Vendor> putVendor(@PathVariable String id ,@RequestBody Vendor vendor) {
         vendor.setId(id);
         return vendorRepository.save(vendor);
+    }
+
+    @PatchMapping("/{id}")
+    public Flux<Vendor> patchVendor(@PathVariable String id ,@RequestBody Vendor vendor) {
+        Mono<Vendor> updatedVendorMono = vendorRepository.findById(id)
+                .map(foundVendor -> {
+                    if (vendor.getFirstName() != null) {
+                        foundVendor.setFirstName(vendor.getFirstName());
+                    }
+                    if (vendor.getLastName() != null) {
+                        foundVendor.setLastName(vendor.getLastName());
+                    }
+                    return foundVendor;
+                });
+
+        return vendorRepository.saveAll(updatedVendorMono);
     }
 }
