@@ -92,4 +92,24 @@ class CategoryControllerTest {
                 .exchange()
                 .expectStatus().isOk();
     }
+
+    @Test
+    void patchCategory() {
+        final String id = "id";
+        final String description = "description";
+
+        given(categoryRepository.findById(id))
+                .willReturn(Mono.just(Category.builder().id(id).build()));
+
+        given(categoryRepository.saveAll(any(Publisher.class)))
+                .willReturn(Flux.just(Category.builder().id(id).description(description).build()));
+
+        Mono<Category> categoryMono = Mono.just(Category.builder().description(description).build());
+
+        webTestClient.patch()
+                .uri("/api/v1/categories/" + id)
+                .body(categoryMono, Category.class)
+                .exchange()
+                .expectStatus().isOk();
+    }
 }

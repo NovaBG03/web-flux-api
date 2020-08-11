@@ -39,6 +39,20 @@ public class CategoryController {
         category.setId(id);
         return categoryRepository.save(category);
     }
+
+    @PatchMapping("/{id}")
+    public Flux<Category> patchCategory(@PathVariable String id, @RequestBody Category category) {
+        Mono<Category> updatedCategoryMono = categoryRepository.findById(id)
+                .map(foundCategory -> {
+                    if (category.getDescription() != null) {
+                        foundCategory.setDescription(category.getDescription());
+                    }
+                    return foundCategory;
+                });
+
+        return categoryRepository.saveAll(updatedCategoryMono);
+    }
 }
+
 
 
