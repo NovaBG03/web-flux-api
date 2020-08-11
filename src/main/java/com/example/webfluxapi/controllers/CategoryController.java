@@ -33,6 +33,12 @@ public class CategoryController {
     public Flux<Category> postCategory(@RequestBody Publisher<Category> categoryPublisher) {
         return categoryRepository.saveAll(categoryPublisher);
     }
+
+    @PutMapping("/{id}")
+    public Mono<Category> putCategory(@PathVariable String id, @RequestBody Category category) {
+        category.setId(id);
+        return categoryRepository.save(category);
+    }
 }
 
 
